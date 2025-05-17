@@ -22,18 +22,7 @@ mongoose.connect('mongodb://localhost:27017/imamuHub')
 .then(() => console.log('تم الاتصال بقاعدة البيانات بنجاح'))
 .catch(err => console.error('خطأ في الاتصال بقاعدة البيانات:', err));
 
-// تضمين الراوتس
-const authRoutes = require('./routes/auth').router;
-const clubsRoutes = require('./routes/clubs');
-const contactRoutes = require('./routes/contact');
 
-// استخدام الراوتس
-app.use('/api', authRoutes);
-app.use('/api/clubs', clubsRoutes);
-app.use('/api/contact', contactRoutes);
-
-// مسار تهيئة البيانات - لإضافة بيانات أولية للنوادي
-const Club = require('./models/Club');
 // تعريف النماذج (Schemas)
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },

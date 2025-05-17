@@ -208,7 +208,7 @@
                 clubs.forEach(club => {
                     // بناء رابط التسجيل مع تمرير معرف النادي في الـ query parameter
                     // رابط التسجيل يفترض أنه يأخذ الطالب إلى صفحة يتم فيها تقديم طلب الانضمام للنادي
-                    const registerLink = `/register.html?clubId=${club._id}&clubName=${encodeURIComponent(club.name)}`;
+                    const registerLink = `/register.html`;
 
                     const clubCardHTML = `
                         <div class="club-card" data-aos="fade-up">
