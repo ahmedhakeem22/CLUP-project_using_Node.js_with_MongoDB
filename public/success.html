@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>تم التسجيل بنجاح</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .success-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: 1.5em;
+            color: #2d6a4f;
+        }
+        
+        p {
+            font-size: 1em;
+            color: #f97316;
+            margin: 10px 0;
+        }
+        
+        button {
+            background-color: #f97316;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #ea580c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="success-container">
+        <h2>تم التسجيل بنجاح!</h2>
+        <p>شكراً لانضمامك إلى النادي.</p>
+        <p>اسمك: <span id="userName"></span></p>
+        <p>تخصصك: <span id="userMajor"></span></p>
+        <p>مهاراتك: <span id="userSkills"></span></p>
+        <p>النادي: <span id="clubName"></span></p>
+        <button onclick="window.location.href='indexlastcheng.html'">العودة للصفحة الرئيسية</button>
+    </div>
+
+    <script>
+        document.getElementById("userName").innerText = localStorage.getItem("userName") || "غير محدد";
+        document.getElementById("userMajor").innerText = localStorage.getItem("userMajor") || "غير محدد";
+        document.getElementById("userSkills").innerText = localStorage.getItem("userSkills") || "غير محدد";
+        document.getElementById("clubName").innerText = localStorage.getItem("clubName") || "غير محدد";
+
+        // تنظيف البيانات بعد العرض
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userMajor");
+        localStorage.removeItem("userSkills");
+        localStorage.removeItem("clubName");
+    </script>
+
+</body>
+
+</html>

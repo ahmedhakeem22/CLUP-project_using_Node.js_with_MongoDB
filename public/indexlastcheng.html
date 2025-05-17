@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>IMMAMUHub</title>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        
+        body::after {
+            content: "";
+            display: block;
+            height: 0;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            scroll-behavior: smooth;
+            /* كحلي نفس الفوتر */
+        }
+        
+        nav {
+            background-color: #1f2937;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logout-btn {
+            background-color: #ef4444;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+        }
+        
+        .hero {
+            background-image: url("https://imamu.edu.sa/PublishingImages/imamU.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+            z-index: 0;
+        }
+        
+        .hero h1,
+        .hero p,
+        .scroll-button {
+            z-index: 1;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .scroll-button {
+            background-color: #f97316;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .clubs-section {
+            padding: 50px 20px;
+            background-color: #f9fafb;
+            min-height: 100vh;
+        }
+        
+        .clubs-section h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 40px;
+        }
+        
+        .clubs-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .club-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .club-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        
+        .club-info {
+            flex: 1;
+        }
+        
+        .club-info h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .club-info p {
+            color: #4b5563;
+            font-size: 0.95em;
+        }
+        
+        #scrollTopBtn:hover {
+            background-color: #ea580c;
+        }
+        
+        footer {
+            background-color: #1f2937;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        footer a {
+            color: #f9fafb;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        * {
+            font-family: 'Tajawal', sans-serif !important;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <nav>
+        <div><strong>IMAMUHub</strong></div>
+        <div class="nav-links">
+            <a href="#">الصفحة الرئيسية</a>
+            <a href="#clubs">النوادي</a>
+            <a href="#">الملف الشخصي</a>
+        </div>
+        <button class="logout-btn">تسجيل الخروج</button>
+    </nav>
+
+
+    <section class="hero">
+        <h1>وجهتك للفُرص، الفعاليات، والتَّجربة</h1>
+        <p>اِستكشف أندية جامعة الإمام محمد بن سعود، واجعل حياتك الجامعية أكثر إشراقاً!</p>
+        <a href="#clubs"><button class="scroll-button">تعرف على النوادي</button></a>
+    </section>
+
+    <section class="clubs-section" id="clubs">
+        <h2>صفحة النوادي</h2>
+        <div class="clubs-container">
+            <div class="club-card" data-aos="fade-up">
+                <img src="https://pbs.twimg.com/profile_images/1843213890496159744/m3_HHwmU_400x400.jpg" alt="نادي تيك نشين" class="club-image">
+                <div class="club-info">
+                    <h3>نادي تيك نشين</h3>
+                    <p>يسعى النادي أن يكون رائدا في التقنية وينشر ثقافة التعليم الذاتي للمهارات التقنية خارج المناهج الدراسية لمواكبة العصر.</p>
+                    <a href="register.html?club=tech" class="register-btn">سجل معنا</a>
+                </div>
+            </div>
+
+            <div class="club-card" data-aos="fade-up" data-aos-delay="100">
+                <img src="https://pbs.twimg.com/profile_images/1639066961651855360/7YeQD5Rv_400x400.jpg" alt="نادي أمن المعلومات" class="club-image">
+                <div class="club-info">
+                    <h3>نادي أمن المعلومات</h3>
+                    <p>يهدف إلى تعزيز مبدأ الحماية من الجرائم الإلكترونية وتصحيح مفهوم أمن المعلومات في أذهان فئات المجتمع.</p>
+                    <a href="register.html?club=security" class="register-btn">سجل معنا</a>
+                </div>
+            </div>
+
+            <div class="club-card" data-aos="fade-up" data-aos-delay="200">
+                <img src="https://pbs.twimg.com/profile_images/1711008586820702208/R33ORhBa_200x200.jpg" alt="نادي قوقل للطلبة المطورين" class="club-image">
+                <div class="club-info">
+                    <h3>نادي قوقل للطلبة المطورين</h3>
+                    <p>سد الفجوة التقنية لدى الطالب والطالبات بثقيفهم بالدورات التعليمية والتطبيق العملي.</p>
+                    <a href="register.html?club=google" class="register-btn">سجل معنا</a>
+                </div>
+            </div>
+
+            <div class="club-card" data-aos="fade-up" data-aos-delay="300">
+                <img src="a308a20d-3485-43ae-a6f5-4204ff1ee32e.jpg" alt="نادي الخوارزميات" class="club-image">
+                <div class="club-info">
+                    <h3>نادي الخوارزميات</h3>
+                    <p>يسعى إلى تعزيز التعلم الذاتي واختصار الوقت والجهد غبر تقديم خطط ومصادر واضحة لكل مسار.</p>
+                    <a href="register.html?club=algorithm" class="register-btn">سجل معنا</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .register-btn {
+            display: inline-block;
+            background-color: #f97316;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-family: 'Tajawal', sans-serif;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .register-btn:hover {
+            background-color: #ea580c;
+        }
+    </style>
+
+
+
+    <section id="financial-jam" style="position: relative; background-image: url('https://your-image-url.jpg'); background-size: cover; background-position: center; color: white; padding: 50px 20px; text-align: center; font-family: 'Arial', sans-serif; overflow: hidden;">
+
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 0;"></div>
+
+
+
+        <div data-aos="fade-up" style="position: relative; z-index: 1;">
+            <h2 style="font-size: 2em; margin-bottom: 20px;">جمعة البيانات المالية</h2>
+            <p style="font-size: 1.2em; max-width: 700px; margin: auto;">
+                تحبّ تحليل البيانات أو مهتم بتحليل البيانات؟ انضم لنا في جمعة البيانات المالية وشارك في هاكثون لتحليل البيانات باستخدام البيانات الموجودة في الرابط، وسيتم إرسال رابط التسليم لأفكار المشاركين عبر البريد. ننتظر إبداعاتكم!
+            </p>
+            <a href="#" style="display: inline-block; margin-top: 20px; background-color: #f97316; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+      اذهب لصفحة التحدي
+    </a>
+        </div>
+    </section>
+
+
+
+
+
+    <section id="contact" style="padding: 60px 20px; background-color: #f9fafb;">
+        <h2 style="text-align: center; font-size: 2em; margin-bottom: 30px;">تواصل معنا</h2>
+        <form id="contactForm" style="max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: right; direction: rtl;">
+            <div style="margin-bottom: 15px;">
+                <label for="name" style="display: block; margin-bottom: 5px; font-weight: bold;">الاسم</label>
+                <input type="text" name="name" id="name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="email" style="display: block; margin-bottom: 5px; font-weight: bold;">البريد الإلكتروني</label>
+                <input type="email" name="email" id="email" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="message" style="display: block; margin-bottom: 5px; font-weight: bold;">رسالتك</label>
+                <textarea name="message" id="message" required rows="5" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+            </div>
+            <div style="text-align: center;">
+                <button type="submit" style="background-color: #f97316; color: white; border: none; padding: 12px 25px; border-radius: 5px; font-size: 1em; cursor: pointer;">إرسال</button>
+            </div>
+        </form>
+
+        <script>
+            document.getElementById('contactForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    message: document.getElementById('message').value
+                };
+
+                const res = await fetch('http://127.0.0.1:3000/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (res.ok) {
+                    alert('✅ تم إرسال رسالتك بنجاح');
+                    this.reset(); // يمسح الحقول بعد الإرسال
+                } else {
+                    alert('❌ حدث خطأ أثناء الإرسال');
+                }
+            });
+        </script>
+
+
+    </section>
+    <footer style="background-color: #2c3e50; color: white; padding: 30px 0 10px; margin-top: 0;">
+
+
+        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 15px;">
+
+            <div>
+                <h3>روابط سريعة</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="Privacy.html" style="color: white; text-decoration: none;"><i class="fas fa-lock"></i> سياسة الخصوصية</a></li>
+                    <li><a href="about.html" style="color: white; text-decoration: none;"><i class="fas fa-users"></i> من نحن</a></li>
+                </ul>
+            </div>
+            <div>
+
+                <h3>تواصل معنا</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="mailto:info@example.com" style="color: white; text-decoration: none;"><i class="fas fa-envelope"></i> البريد الإلكتروني</a></li>
+                    <li><a href="tel:+966123456789" style="color: white; text-decoration: none;"><i class="fas fa-phone"></i> +966 123 456 789</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <p style="margin-top: 20px;">&copy; 2025 جميع الحقوق محفوظة</p>
+
+        </section>
+
+        <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" style="background-color: #f97316; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">
+          ↑ أعلى
+      </button>
+    </footer>
+
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imamu Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("https://imamu.edu.sa/PublishingImages/imamU.jpg") no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(8px);
+            z-index: 0;
+        }
+        
+        .welcome-box,
+        .box {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .welcome-box {
+            max-width: 500px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .welcome-box h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #f97316;
+        }
+        
+        .welcome-box h1 span {
+            color: #857a7a;
+        }
+        
+        .welcome-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #7e4242;
+        }
+        
+        .welcome-box p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            background-color: #f97316;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .btn:hover {
+            background-color: #ea580c;
+        }
+        
+        .box {
+            display: none;
+            max-width: 320px;
+        }
+        
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-btn {
+            flex: 1;
+            background-color: #ddd;
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .toggle-btn.selected {
+            background-color: #f97316;
+            color: white;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fff;
+            font-family: 'Tajawal', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="welcome-box" id="welcome-box">
+        <h1>مرحبًا بك في <span>Imamu Hub</span></h1>
+        <h2>وجهتك للفُرص، الفعاليات، والتَّجربة</h2>
+        <p>اِستكشف أندية جامعة الإمام محمد بن سعود، واجعل حياتك الجامعية أكثر إشراقاً!</p>
+        <button class="btn" onclick="openAuth()">تسجيل الدخول / إنشاء حساب</button>
+    </div>
+
+    <div class="box" id="auth-box">
+        <div class="toggle-buttons">
+            <button class="toggle-btn selected" id="student-btn" onclick="showLogin('student')">تسجيل دخول الطالب</button>
+            <button class="toggle-btn" id="club-btn" onclick="showLogin('club')">تسجيل دخول النادي</button>
+        </div>
+
+        <div id="student-login">
+            <h2>تسجيل الدخول كطالب</h2>
+            <form>
+                <input type="email" placeholder="البريد الإلكتروني" required />
+                <input type="password" placeholder="كلمة المرور" required />
+                <button class="btn" type="submit">تسجيل الدخول</button>
+            </form>
+            <p class="create-account">
+                ليس لديك حساب؟ <a href="#" onclick="openRegister()">إنشاء حساب جديد</a>
+            </p>
+        </div>
+
+        <div id="club-login" style="display: none;">
+            <h2>تسجيل الدخول كنادي</h2>
+            <form>
+                <input type="email" placeholder="البريد الإلكتروني" required />
+                <input type="password" placeholder="كلمة المرور" required />
+                <button class="btn" type="submit">تسجيل الدخول</button>
+            </form>
+            <p class="create-account">
+                ليس لديك حساب؟ <a href="#" onclick="openRegister()">إنشاء حساب جديد</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openAuth() {
+            document.getElementById("welcome-box").style.display = "none";
+            document.getElementById("auth-box").style.display = "block";
+        }
+
+        function showLogin(type) {
+            document.getElementById('student-login').style.display = type === 'student' ? 'block' : 'none';
+            document.getElementById('club-login').style.display = type === 'club' ? 'block' : 'none';
+            document.getElementById('student-btn').classList.toggle('selected', type === 'student');
+            document.getElementById('club-btn').classList.toggle('selected', type === 'club');
+        }
+
+        function openRegister() {
+            document.getElementById('auth-box').innerHTML = `
+                <div class="toggle-buttons">
+                    <button class="toggle-btn selected" onclick="showRegister('student')">إنشاء حساب طالب</button>
+                    <button class="toggle-btn" onclick="showRegister('club')">إنشاء حساب نادي</button>
+                </div>
+                <div id="student-register">
+                    <h2>إنشاء حساب كطالب</h2>
+                    <input type="text" placeholder="الاسم الكامل" required />
+                    <input type="email" placeholder="البريد الإلكتروني" required />
+                    <input type="password" placeholder="كلمة المرور" required />
+                    <button class="btn">إنشاء حساب</button>
+                </div>
+                <div id="club-register" style="display: none;">
+                    <h2>إنشاء حساب كنادي</h2>
+                    <input type="text" placeholder="اسم النادي" required />
+                    <input type="email" placeholder="البريد الإلكتروني" required />
+                    <input type="password" placeholder="كلمة المرور" required />
+                    <button class="btn">إنشاء حساب</button>
+                </div>`;
+        }
+    </script>
+</body>
+
+</html>
