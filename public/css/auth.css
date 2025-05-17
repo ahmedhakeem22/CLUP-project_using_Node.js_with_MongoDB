@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  font-family: "Tajawal", sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://imamu.edu.sa/PublishingImages/imamU.jpg") no-repeat
+    center center fixed;
+  background-size: cover;
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.welcome-box,
+.box {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  font-family: "Tajawal", sans-serif;
+}
+
+.welcome-box {
+  max-width: 500px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome-box h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #f97316;
+}
+
+.welcome-box h1 span {
+  color: #857a7a;
+}
+
+.welcome-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #7e4242;
+}
+
+.welcome-box p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: "Tajawal", sans-serif;
+}
+
+.btn:hover {
+  background-color: #ea580c;
+}
+
+.box {
+  display: none;
+  max-width: 320px;
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.toggle-btn {
+  flex: 1;
+  background-color: #ddd;
+  color: #333;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-btn.selected {
+  background-color: #f97316;
+  color: white;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  font-family: "Tajawal", sans-serif;
+}

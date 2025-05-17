@@ -1,0 +1,194 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+footer {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+body::after {
+  content: "";
+  display: block;
+  height: 0;
+}
+
+body {
+  margin: 0;
+  font-family: "Tajawal", sans-serif;
+  scroll-behavior: smooth;
+  /* كحلي نفس الفوتر */
+}
+
+nav {
+  background-color: #1f2937;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.logout-btn {
+  background-color: #ef4444;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+}
+
+.hero {
+  background-image: url("https://imamu.edu.sa/PublishingImages/imamU.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 0;
+}
+
+.hero h1,
+.hero p,
+.scroll-button {
+  z-index: 1;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.scroll-button {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clubs-section {
+  padding: 50px 20px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.clubs-section h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 40px;
+}
+
+.clubs-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.club-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  direction: rtl;
+  text-align: right;
+}
+
+.club-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.club-info {
+  flex: 1;
+}
+
+.club-info h3 {
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.club-info p {
+  color: #4b5563;
+  font-size: 0.95em;
+}
+
+#scrollTopBtn:hover {
+  background-color: #ea580c;
+}
+
+footer {
+  background-color: #1f2937;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+footer a {
+  color: #f9fafb;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+* {
+  font-family: "Tajawal", sans-serif !important;
+}

@@ -1,0 +1,44 @@
+body {
+  font-family: "Tajawal", sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.success-container {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.5em;
+  color: #2d6a4f;
+}
+
+p {
+  font-size: 1em;
+  color: #f97316;
+  margin: 10px 0;
+}
+
+button {
+  background-color: #f97316;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #ea580c;
+}

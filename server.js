@@ -2,12 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 const JWT_SECRET = 'imamu-hub-secret-key';
 
 // الإعدادات الوسيطة
@@ -16,13 +17,23 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // توصيل قاعدة البيانات
-mongoose.connect('mongodb://localhost:27017/imamuHub', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect('mongodb://localhost:27017/imamuHub')
+
 .then(() => console.log('تم الاتصال بقاعدة البيانات بنجاح'))
 .catch(err => console.error('خطأ في الاتصال بقاعدة البيانات:', err));
 
+// تضمين الراوتس
+const authRoutes = require('./routes/auth').router;
+const clubsRoutes = require('./routes/clubs');
+const contactRoutes = require('./routes/contact');
+
+// استخدام الراوتس
+app.use('/api', authRoutes);
+app.use('/api/clubs', clubsRoutes);
+app.use('/api/contact', contactRoutes);
+
+// مسار تهيئة البيانات - لإضافة بيانات أولية للنوادي
+const Club = require('./models/Club');
 // تعريف النماذج (Schemas)
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },

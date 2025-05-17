@@ -3,56 +3,53 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>التسجيل في النادي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/register.css">
+
     <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f9fafb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        
-        .register-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        
-        h2 {
-            text-align: center;
+        /* يمكنك إضافة أو تعديل الستايلات هنا إذا احتجت */
+        /* مثال: ستايل لرسائل التنبيه */
+        .alert {
+            padding: 15px;
             margin-bottom: 20px;
-        }
-        
-        input,
-        textarea,
-        select,
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
             border-radius: 5px;
-            font-family: 'Tajawal', sans-serif;
+            display: none; /* مخفي افتراضياً */
+            font-weight: bold;
+            text-align: center;
         }
-        
-        button {
-            background-color: #f97316;
-            color: white;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
-        
-        button:hover {
-            background-color: #ea580c;
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
+        .loading {
+             text-align: center;
+             color: #555;
+             margin-bottom: 15px;
+             display: none; /* مخفي افتراضياً */
+        }
+         #viewProfileBtn {
+             margin-top: 20px;
+             padding: 10px 20px;
+             font-size: 1em;
+             cursor: pointer;
+             border: none;
+             border-radius: 5px;
+             color: white;
+         }
+         #clubNameDisplay {
+             text-align: center;
+             margin-bottom: 20px;
+             font-size: 1.3em;
+             font-weight: bold;
+         }
     </style>
 </head>
 
@@ -60,51 +57,242 @@
 
     <div class="register-container">
         <h2>التسجيل في النادي</h2>
+        <div id="alert" class="alert"></div>
+        <div id="loading" class="loading">جاري التحميل...</div>
+
+        <!-- لعرض اسم النادي إذا تم المجيء من رابط معين -->
+        <div id="clubNameDisplay" style="display: none;"></div>
+
         <form id="registerForm">
             <input type="text" id="userName" name="name" placeholder="اسمك الكامل" required>
             <input type="text" id="userMajor" name="major" placeholder="تخصصك" required>
             <textarea id="userSkills" name="skills" rows="3" placeholder="مهاراتك" required></textarea>
-            <select id="clubName" required>
+
+            <!-- القائمة المنسدلة للنوادي (تظهر فقط إذا لم يتم تحديد نادي من الـ URL) -->
+            <select id="clubSelect" required style="display: none;">
                 <option value="" disabled selected>اختر النادي</option>
-                <option value="نادي تيك نشين">نادي تيك نشين</option>
-                <option value="نادي أمن المعلومات">نادي أمن المعلومات</option>
-                <option value="نادي قوقل للطلبة المطورين">نادي قوقل للطلبة المطورين</option>
-                <option value="نادي الخوارزميات">نادي الخوارزميات</option>
             </select>
-            <button type="submit">إرسال</button>
+
+            <button type="submit">إرسال الطلب</button>
         </form>
+        <button id="viewProfileBtn" style="background-color: #6b7280; display: none;">عرض النوادي المسجل بها</button> <!-- تم تعديل النص -->
     </div>
 
     <script>
-        // تسجيل المستخدم في النادي وتخزين البيانات
+        let selectedClubId = null; // متغير لتخزين معرف النادي سواء من الـ URL أو القائمة المنسدلة
+
+        // التحقق من تسجيل الدخول ونوع المستخدم عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user')); // جلب كائن المستخدم بالكامل
+
+            const form = document.getElementById('registerForm');
+            const alertDiv = document.getElementById('alert');
+            const loadingDiv = document.getElementById('loading');
+            const clubSelect = document.getElementById('clubSelect');
+            const clubNameDisplayDiv = document.getElementById('clubNameDisplay');
+            const viewProfileBtn = document.getElementById('viewProfileBtn');
+
+            // إخفاء العناصر عند التحميل حتى يتم التحقق
+            form.style.display = 'none';
+            alertDiv.style.display = 'none';
+            loadingDiv.style.display = 'none';
+            viewProfileBtn.style.display = 'none';
+
+
+            if (!token || !user) {
+                showAlert('يجب تسجيل الدخول أولاً للمتابعة', 'error');
+                // توجيه المستخدم لصفحة الدخول بعد فترة قصيرة
+                 setTimeout(() => {
+                     window.location.href = '/auth.html';
+                 }, 3000); // انتظر 3 ثواني قبل التوجيه
+                return;
+            }
+
+            if (user.type !== 'student') { // التحقق من type داخل كائن المستخدم
+                showAlert('التسجيل في النوادي متاح للطلاب فقط', 'error');
+                return; // توقف هنا إذا لم يكن طالب
+            }
+
+            // إذا كان المستخدم طالب ومسجل الدخول، قم بتحميل محتوى الصفحة
+
+            // قراءة معرف النادي من الـ URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const clubIdFromUrl = urlParams.get('clubId');
+            const clubNameFromUrl = urlParams.get('clubName');
+
+            if (clubIdFromUrl && clubNameFromUrl) {
+                // إذا كان معرف النادي واسمه موجودين في الـ URL
+                selectedClubId = clubIdFromUrl;
+                clubNameDisplayDiv.textContent = `تسجيل في نادي: ${decodeURIComponent(clubNameFromUrl)}`;
+                clubNameDisplayDiv.style.display = 'block'; // عرض اسم النادي
+                clubSelect.style.display = 'none'; // إخفاء القائمة المنسدلة
+                form.style.display = 'block'; // عرض النموذج
+                // يمكنك هنا أيضاً تعبئة حقول الاسم والتخصص من بيانات المستخدم المخزنة
+                const userNameInput = document.getElementById('userName');
+                const userMajorInput = document.getElementById('userMajor');
+                if (user.name) userNameInput.value = user.name;
+                if (user.major) userMajorInput.value = user.major;
+
+
+            } else {
+                // إذا لم يتم تحديد نادي من الـ URL، قم بجلب قائمة النوادي
+                clubNameDisplayDiv.style.display = 'none'; // إخفاء عرض اسم النادي
+                clubSelect.style.display = 'block'; // عرض القائمة المنسدلة
+                await fetchClubs(); // جلب النوادي وتعبئة القائمة المنسدلة
+                 // بعد جلب النوادي وتعبئة الـ select، يمكن عرض النموذج
+                 form.style.display = 'block';
+                 // يمكنك هنا أيضاً تعبئة حقول الاسم والتخصص من بيانات المستخدم المخزنة
+                const userNameInput = document.getElementById('userName');
+                const userMajorInput = document.getElementById('userMajor');
+                if (user.name) userNameInput.value = user.name;
+                if (user.major) userMajorInput.value = user.major;
+            }
+
+             // إعداد مستمع لزر عرض الملف الشخصي
+            viewProfileBtn.addEventListener('click', function() {
+                window.location.href = '/UserProfile.html'; // التوجيه لصفحة الملف الشخصي
+            });
+
+
+        });
+
+        // جلب قائمة النوادي (تستخدم فقط إذا لم يتم تحديد نادي من الـ URL)
+        async function fetchClubs() {
+            showLoading(true);
+            const alertDiv = document.getElementById('alert');
+            const clubSelect = document.getElementById('clubSelect');
+
+            try {
+                // استخدام المسار النسبي
+                const response = await fetch('/api/clubs');
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'فشل في جلب قائمة النوادي');
+                }
+
+                const clubs = await response.json();
+
+                // مسح الخيارات القديمة باستثناء الخيار الأول (المعطل)
+                 clubSelect.innerHTML = '<option value="" disabled selected>اختر النادي</option>';
+
+
+                if (clubs.length === 0) {
+                     const option = document.createElement('option');
+                     option.value = "";
+                     option.textContent = "لا توجد نوادي متاحة حالياً";
+                     option.disabled = true; // لا يمكن اختيار هذا الخيار
+                     option.selected = true; // يظهر كخيار محدد
+                     clubSelect.appendChild(option);
+
+                     showAlert('لا توجد نوادي متاحة حالياً للتسجيل.', 'info'); // رسالة معلومات بدلا من خطأ قاتل
+                     document.getElementById('registerForm').style.display = 'none'; // إخفاء الفورم إذا لم تكن هناك نوادي
+
+                } else {
+                     clubs.forEach(club => {
+                        const option = document.createElement('option');
+                        option.value = club._id;
+                        option.textContent = club.name;
+                        clubSelect.appendChild(option);
+                    });
+                     // جعل الخيار الأول (اختر النادي) هو المحدد افتراضياً
+                     clubSelect.value = ""; // تأكد من أن القيمة فارغة لتحديد الخيار المعطل
+                }
+
+
+            } catch (error) {
+                console.error('خطأ:', error);
+                showAlert(`حدث خطأ أثناء جلب قائمة النوادي: ${error.message}`, 'error');
+                 // إخفاء الفورم في حالة الخطأ
+                 document.getElementById('registerForm').style.display = 'none';
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // إرسال طلب التسجيل في النادي
         document.getElementById("registerForm").addEventListener("submit", function(e) {
             e.preventDefault();
             registerClub();
         });
 
-        function registerClub() {
-            const userName = document.getElementById("userName").value;
-            const userMajor = document.getElementById("userMajor").value;
-            const userSkills = document.getElementById("userSkills").value;
-            const clubName = document.getElementById("clubName").value;
+        async function registerClub() {
+            const nameInput = document.getElementById("userName");
+            const majorInput = document.getElementById("userMajor");
+            const skillsInput = document.getElementById("userSkills");
+            const clubSelect = document.getElementById("clubSelect");
+            const viewProfileBtn = document.getElementById('viewProfileBtn');
+            const form = document.getElementById('registerForm');
 
-            if (userName && userMajor && userSkills && clubName) {
-                // تخزين بيانات المستخدم في localStorage
-                let registeredClubs = JSON.parse(localStorage.getItem("registeredClubs")) || [];
-                registeredClubs.push({
-                    club: clubName,
-                    major: userMajor,
-                    skills: userSkills
+            const name = nameInput.value.trim(); // استخدام trim لإزالة المسافات البيضاء
+            const major = majorInput.value.trim();
+            const skills = skillsInput.value.trim();
+            // استخدام selectedClubId إذا كان متاحاً (من الـ URL) وإلا فاستخدم القيمة من القائمة المنسدلة
+            const clubId = selectedClubId || clubSelect.value;
+            const token = localStorage.getItem('token');
+
+            // تحقق من البيانات (خاصة إذا لم يكن هناك نادي محدد من الـ URL)
+            if (!name || !major || !skills || !clubId) {
+                showAlert('يرجى تعبئة جميع الحقول واختيار النادي', 'error');
+                return;
+            }
+
+            showLoading(true);
+
+            const registrationData = {
+                clubId: clubId,
+                name: name,
+                major: major,
+                skills: skills
+            };
+
+            try {
+                // استخدام المسار النسبي
+                const response = await fetch('/api/club-registration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(registrationData)
                 });
 
-                localStorage.setItem("userName", userName);
-                localStorage.setItem("registeredClubs", JSON.stringify(registeredClubs));
+                const data = await response.json();
 
-                // التوجيه إلى صفحة الملف الشخصي
-                window.location.href = "UserProfile.html";
-            } else {
-                alert("يرجى تعبئة جميع الحقول.");
+                if (!response.ok) {
+                    // إذا لم تكن الاستجابة ناجحة (مثل 400 أو 403 أو 404)
+                    throw new Error(data.message || 'حدث خطأ في التسجيل');
+                }
+
+                // عند النجاح
+                showAlert('✅ تم التسجيل في النادي بنجاح!', 'success');
+                form.style.display = 'none'; // إخفاء النموذج
+                viewProfileBtn.style.display = 'block'; // عرض زر عرض الملف الشخصي
+
+
+            } catch (error) {
+                console.error('خطأ:', error);
+                showAlert(`❌ ${error.message || 'حدث خطأ أثناء التسجيل'}`, 'error');
+            } finally {
+                showLoading(false);
             }
+        }
+
+        // وظائف مساعدة لعرض التنبيهات والتحميل
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.textContent = message;
+            // تأكد من إزالة أي فئات سابقة قبل إضافة الفئة الجديدة
+            alertDiv.className = 'alert'; // إعادة تعيين الفئات
+            alertDiv.classList.add(`alert-${type}`); // إضافة الفئة الجديدة
+            alertDiv.style.display = 'block';
+            // يمكنك إضافة مؤقت لإخفاء التنبيه بعد بضع ثوانٍ إذا أردت
+             // setTimeout(() => { alertDiv.style.display = 'none'; }, 5000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
         }
     </script>
 

@@ -1,0 +1,58 @@
+body {
+  font-family: "Tajawal", sans-serif;
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-header {
+  background-color: #1f2937;
+  color: white;
+  padding: 15px;
+  border-radius: 10px 10px 0 0;
+}
+
+.profile-header h1 {
+  margin: 0;
+}
+
+.club-list {
+  background: white;
+  padding: 20px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.club-card {
+  background-color: #ffffff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: right;
+}
+
+.club-card h3 {
+  color: #f97316;
+}
+
+.club-card p {
+  color: #1f2937;
+}
+
+.back-button {
+  display: inline-block;
+  margin-top: 15px;
+  background-color: #f97316;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+}

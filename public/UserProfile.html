@@ -3,67 +3,57 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ملفك الشخصي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/UserProfile.css">
+
     <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f9fafb;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .profile-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .profile-header {
-            background-color: #1f2937;
-            color: white;
-            padding: 15px;
-            border-radius: 10px 10px 0 0;
-        }
-        
-        .profile-header h1 {
-            margin: 0;
-        }
-        
-        .club-list {
-            background: white;
-            padding: 20px;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
+        /* يمكنك إضافة أو تعديل الستايلات هنا */
         .club-card {
-            background-color: #ffffff;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            background-color: #fff;
             border-radius: 8px;
-            text-align: right;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .club-card h3 {
-            color: #f97316;
+            margin-top: 0;
+            color: #f97316; /* لون يتماشى مع ألوانك */
         }
-        
+
         .club-card p {
-            color: #1f2937;
+            margin-bottom: 5px;
+            color: #555;
         }
-        
-        .back-button {
-            display: inline-block;
-            margin-top: 15px;
-            background-color: #f97316;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
+
+        .loading-message, .error-message, .no-clubs-message {
+            text-align: center;
+            color: #555;
+            font-size: 1.1em;
+            margin-top: 20px;
         }
+
+        .error-message {
+            color: #d9534f; /* لون أحمر للخطأ */
+        }
+
+         .back-button {
+             display: inline-block;
+             margin-top: 30px;
+             background-color: #6b7280;
+             color: white;
+             padding: 10px 20px;
+             border-radius: 5px;
+             text-decoration: none;
+             font-family: 'Tajawal', sans-serif;
+             transition: background-color 0.3s ease;
+         }
+
+         .back-button:hover {
+             background-color: #4b5563;
+         }
     </style>
 </head>
 
@@ -74,30 +64,96 @@
             <p>الأندية التي سجلت فيها</p>
         </div>
 
-        <div class="club-list" id="clubList"></div>
+        <div class="club-list" id="clubList">
+            <!-- سيتم تحميل محتوى هنا بواسطة JavaScript -->
+            <p class="loading-message">جاري تحميل الأندية المسجل فيها...</p>
+        </div>
 
-        <a href="indexlastcheng.html" class="back-button">العودة للصفحة الرئيسية</a>
+        <a href="/indexlastcheng.html" class="back-button">العودة للصفحة الرئيسية</a> <!-- تم التأكد من الرابط -->
     </div>
 
     <script>
-        // تحميل بيانات المستخدم والأندية من localStorage
-        const userName = localStorage.getItem("userName") || "مستخدم غير معروف";
-        const registeredClubs = JSON.parse(localStorage.getItem("registeredClubs")) || [];
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user')); // جلب كائن المستخدم بالكامل
+            const clubListDiv = document.getElementById('clubList');
 
-        const clubList = document.getElementById("clubList");
-        if (registeredClubs.length > 0) {
-            registeredClubs.forEach((club) => {
-                const clubCard = document.createElement("div");
-                clubCard.className = "club-card";
-                clubCard.innerHTML = `
-                    <h3>${club.club}</h3>
-                    <p>التخصص: ${club.major}</p>
-                    <p>المهارات: ${club.skills}</p>
-                `;
-                clubList.appendChild(clubCard);
-            });
-        } else {
-            clubList.innerHTML = "<p>لم تسجل في أي نادي بعد.</p>";
+            // إخفاء رسالة التحميل المبدئية حتى نبدأ عملية الجلب
+            clubListDiv.innerHTML = '<p class="loading-message">جاري تحميل الأندية المسجل فيها...</p>';
+
+
+            if (!token || !user) {
+                // إذا لم يتم العثور على توكن أو بيانات مستخدم، قم بالتوجيه لصفحة الدخول
+                clubListDiv.innerHTML = '<p class="error-message">يجب تسجيل الدخول لعرض هذه الصفحة.</p>';
+                 setTimeout(() => {
+                     window.location.href = '/auth.html';
+                 }, 3000); // انتظر 3 ثواني قبل التوجيه
+                return;
+            }
+
+            if (user.type !== 'student') {
+                // إذا كان نوع المستخدم ليس طالباً
+                clubListDiv.innerHTML = '<p class="error-message">هذه الصفحة متاحة للطلاب فقط.</p>';
+                // يمكنك إضافة توجيه لصفحة أخرى هنا إذا لزم الأمر
+                return; // توقف عن التنفيذ
+            }
+
+            // إذا كان المستخدم طالباً ومسجلاً الدخول، قم بجلب النوادي
+            fetchRegisteredClubs(token, clubListDiv);
+
+        });
+
+        async function fetchRegisteredClubs(token, clubListElement) {
+            try {
+                // استخدام المسار النسبي وجلب النوادي المسجل فيها الطالب
+                const response = await fetch('/api/my-clubs', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}` // إرسال التوكن للمصادقة
+                    }
+                });
+
+                // مسح رسالة التحميل
+                clubListElement.innerHTML = '';
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'فشل في جلب قائمة النوادي المسجل فيها');
+                }
+
+                const registrations = await response.json();
+
+                if (registrations.length === 0) {
+                    // إذا لم يتم العثور على تسجيلات
+                    clubListElement.innerHTML = '<p class="no-clubs-message">لم تسجل في أي نادي بعد.</p>';
+                } else {
+                    // عرض بطاقات النوادي المسجل فيها
+                    registrations.forEach((registration) => {
+                        // كل registration يجب أن يحتوي على clubId populated
+                        const club = registration.clubId; // تفاصيل النادي موجودة هنا
+
+                        if (!club) {
+                            // في حالة نادرة لم يتم populate النادي بشكل صحيح أو حذف النادي
+                             console.warn('Club data missing for registration:', registration);
+                             return; // تخطي هذا التسجيل
+                        }
+
+                        const clubCard = document.createElement("div");
+                        clubCard.className = "club-card";
+                        clubCard.innerHTML = `
+                            <h3>${club.name}</h3> <!-- اسم النادي من تفاصيل النادي -->
+                            <p>تخصص التسجيل: ${registration.major}</p> <!-- التخصص من بيانات التسجيل -->
+                            <p>المهارات المسجلة: ${registration.skills}</p> <!-- المهارات من بيانات التسجيل -->
+                            <p>تاريخ التسجيل: ${new Date(registration.registeredAt).toLocaleDateString()}</p> <!-- تاريخ التسجيل -->
+                        `;
+                        clubListElement.appendChild(clubCard);
+                    });
+                }
+
+            } catch (error) {
+                console.error('خطأ في جلب النوادي المسجل فيها:', error);
+                clubListElement.innerHTML = `<p class="error-message">حدث خطأ أثناء تحميل النوادي: ${error.message}</p>`;
+            }
         }
     </script>
 </body>
